@@ -10,7 +10,7 @@ class Config:
     BOT_TOKEN = ""
     HELPER_TOKENS = ""
     BOT_MAX_TASKS = 0
-    BOT_PM = False
+    BOT_PM = True
     CMD_SUFFIX = ""
     DEFAULT_LANG = "en"
     DATABASE_URL = ""
@@ -21,7 +21,7 @@ class Config:
     DISABLE_LEECH = False
     DISABLE_BULK = False
     DISABLE_MULTI = False
-    DISABLE_SEED = False
+    DISABLE_SEED = True
     DISABLE_FF_MODE = False
     EQUAL_SPLITS = False
     EXCLUDED_EXTENSIONS = ""
@@ -111,7 +111,7 @@ class Config:
     USER_TIME_INTERVAL = 0
     UPLOAD_PATHS = {}
     UPSTREAM_REPO = ""
-    UPSTREAM_BRANCH = "master"
+    UPSTREAM_BRANCH = "wzv3"
     UPDATE_PKGS = True
     USENET_SERVERS = []
     USER_SESSION_STRING = ""
