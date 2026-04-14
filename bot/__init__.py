@@ -1,8 +1,5 @@
 # ruff: noqa: E402
 
-from uvloop import install
-
-install()
 
 from subprocess import run as srun
 from os import getcwd
