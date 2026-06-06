@@ -3,6 +3,11 @@ from uvloop import install
 
 install()
 
+from asyncio import new_event_loop, set_event_loop
+
+bot_loop = new_event_loop()
+set_event_loop(bot_loop)
+
 from asyncio import sleep
 from urllib.parse import urlparse
 from contextlib import asynccontextmanager
@@ -15,9 +20,6 @@ from fastapi import FastAPI, Request, HTTPException
 from fastapi.responses import HTMLResponse, JSONResponse
 from fastapi.templating import Jinja2Templates
 from sabnzbdapi import SabnzbdClient
-from aioaria2 import Aria2HttpClient
-from aioqbt.client import create_client
-from aiohttp.client_exceptions import ClientError
 from aioqbt.exc import AQError
 
 from web.nodes import extract_file_ids, make_tree
@@ -103,7 +105,7 @@ async def re_verify(paused, resumed, hash_id):
 
 @app.get("/app/files", response_class=HTMLResponse)
 async def files(request: Request):
-    return templates.TemplateResponse("page.html", {"request": request})
+    return templates.TemplateResponse(request, "page.html")
 
 
 @app.api_route(
@@ -256,7 +258,7 @@ async def set_aria2(gid, selected_files):
 
 @app.get("/", response_class=HTMLResponse)
 async def homepage(request: Request):
-    return templates.TemplateResponse("landing.html", {"request": request})
+    return templates.TemplateResponse(request, "landing.html")
 
 
 def rewrite_location(location: str, proxy_prefix: str) -> str:
