@@ -1,4 +1,5 @@
 from asyncio import gather, sleep, wait_for, TimeoutError
+from pyrogram.enums import ButtonStyle
 from platform import platform, version
 from re import search as research
 from time import time
@@ -56,7 +57,14 @@ commands = {
     "aiohttp": (["uv", "pip", "show", "aiohttp"], r"Version: ([\d.]+)"),
     "pyrotgfork": (["uv", "pip", "show", "pyrotgfork"], r"Version: ([\d.]+)"),
     "gapi": (["uv", "pip", "show", "google-api-python-client"], r"Version: ([\d.]+)"),
-    "mega": (["mega-version"], r"version: ([\d.]+)"),
+    "mega": (
+        [
+            "python3",
+            "-c",
+            "from mega import MegaApi; print(MegaApi('test').getVersion())",
+        ],
+        r"v?([\d.]+)",
+    ),
 }
 
 
@@ -226,7 +234,9 @@ async def get_stats(event, key="home"):
         btns.data_button("🔄 Refresh", f"stats {user_id} systasks", "header")
 
     btns.data_button("Back", f"stats {user_id} home", "footer")
-    btns.data_button("Close", f"stats {user_id} close", "footer")
+    btns.data_button(
+        "Close", f"stats {user_id} close", "footer", style=ButtonStyle.DANGER
+    )
     return msg, btns.build_menu(8 if key == "systasks" else 2)
 
 
@@ -247,7 +257,7 @@ async def stats_pages(_, query):
         await query.answer()
         await delete_message(message, message.reply_to_message)
     elif data[2] == "killproc":
-        if data[2] == "systasks" and not await CustomFilters.owner(_, query):
+        if not await CustomFilters.owner(_, query):
             await query.answer("Sorry! You cannot Kill System Tasks!", show_alert=True)
             return
         pid = int(data[3])
@@ -303,9 +313,9 @@ async def retry_mega_version():
     version = await get_version_async(command, regex, timeout=10)
     if version != "Timeout" and not version.startswith("Exception"):
         bot_cache["eng_versions"]["mega"] = version
-        LOGGER.info(f"MegaCMD Version Fetched: {version}")
+        LOGGER.info(f"MegaSDK Version Fetched: {version}")
     else:
-        LOGGER.warning(f"Failed to fetch MegaCMD Version: {version}")
+        LOGGER.warning(f"Failed to fetch MegaSDK Version: {version}")
 
 
 @new_task
